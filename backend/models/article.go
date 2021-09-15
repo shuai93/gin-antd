@@ -6,6 +6,8 @@ import (
 )
 
 type Article struct {
+	ID int `gorm:"primary_key" json:"id"`
+
 	Model
 
 	TagID int `json:"tag_id" gorm:"index"`

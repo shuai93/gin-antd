@@ -3,7 +3,7 @@ package jwt
 import (
 	"backend/utils/common"
 	"backend/utils/logging"
-	"backend/utils/util"
+	"backend/utils/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -15,7 +15,7 @@ func JWT() gin.HandlerFunc {
 		var data interface{}
 		var token string
 
-		code = common.SUCCESS
+		code = response.SUCCESS
 
 		token = c.Query("token")
 		if token == "" {
@@ -24,23 +24,23 @@ func JWT() gin.HandlerFunc {
 
 		logging.Info("token is %s", token)
 		if token == "" {
-			code = common.INVALID_PARAMS
+			code = response.ErrorAuth
 		} else {
-			claims, err := util.ParseToken(token)
+			claims, err := common.ParseToken(token)
 			if err != nil {
-				code = common.ERROR_AUTH_CHECK_TOKEN_FAIL
+				code = response.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = common.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+				code = response.ErrorAuthCheckTokenTimeout
 			}
 			if claims != nil {
 				c.Set("username", claims.Username)
 			}
 		}
 
-		if code != common.SUCCESS {
+		if code != response.SUCCESS {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": code,
-				"msg":  common.GetMsg(code),
+				"msg":  response.Msg[code],
 				"data": data,
 			})
 

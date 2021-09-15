@@ -14,10 +14,9 @@ import (
 var db *gorm.DB
 
 type Model struct {
-	ID         int `gorm:"primary_key" json:"id"`
-	CreatedOn  int `json:"created_on"`
-	ModifiedOn int `json:"modified_on"`
-	DeletedOn  int `json:"deleted_on"`
+	CreateTime time.Time `gorm:"column:create_time;default:null" json:"create_time"`
+	UpdateTime time.Time `gorm:"column:update_time;default:null" json:"update_time"`
+	Deleted    int
 }
 
 func GetMysqlConnUrl() string {
@@ -45,6 +44,8 @@ func Setup() {
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 
+	//db, err := gorm.Open(sqlite.Open("blog.db"), &gorm.Config{})
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -54,6 +55,7 @@ func Setup() {
 	if err != nil {
 		log.Println(err)
 	}
+	_ = db.AutoMigrate(&User{})
 
 	//  设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(10)

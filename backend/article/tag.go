@@ -1,10 +1,10 @@
-package v1
+package article
 
 import (
 	"backend/models"
 	"backend/utils/common"
+	"backend/utils/response"
 	"backend/utils/setting"
-	"backend/utils/util"
 	"github.com/astaxie/beego/adapter/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
@@ -28,14 +28,14 @@ func GetTags(c *gin.Context) {
 		maps["state"] = state
 	}
 
-	code := common.SUCCESS
+	code := response.SUCCESS
 
-	data["lists"] = models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
+	data["lists"] = models.GetTags(common.GetPage(c), setting.AppSetting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": data,
 	})
 }
@@ -60,19 +60,19 @@ func AddTag(c *gin.Context) {
 	valid.MaxSize(createdBy, 100, "created_by").Message("创建人最长为100字符")
 	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
 		if !models.ExistTagByName(name) {
-			code = common.SUCCESS
+			code = response.SUCCESS
 			models.AddTag(name, state, createdBy)
 		} else {
-			code = common.ERROR_EXIST_TAG
+			code = response.ERROR
 		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]string),
 	})
 }
@@ -103,9 +103,9 @@ func EditTag(c *gin.Context) {
 	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
 	valid.MaxSize(name, 100, "name").Message("名称最长为100字符")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
-		code = common.SUCCESS
+		code = response.SUCCESS
 		if models.ExistTagByID(id) {
 			data := make(map[string]interface{})
 			data["modified_by"] = modifiedBy
@@ -118,13 +118,13 @@ func EditTag(c *gin.Context) {
 
 			models.EditTag(id, data)
 		} else {
-			code = common.ERROR_NOT_EXIST_TAG
+			code = response.ERROR
 		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]string),
 	})
 }
@@ -136,19 +136,19 @@ func DeleteTag(c *gin.Context) {
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
-		code = common.SUCCESS
+		code = response.SUCCESS
 		if models.ExistTagByID(id) {
 			models.DeleteTag(id)
 		} else {
-			code = common.ERROR_NOT_EXIST_TAG
+			code = response.ERROR
 		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]string),
 	})
 }

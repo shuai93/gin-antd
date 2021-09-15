@@ -1,4 +1,4 @@
-package util
+package common
 
 import (
 	"backend/utils/setting"
@@ -7,6 +7,7 @@ import (
 )
 
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)
+var expireTime = time.Now().Add(12 * time.Hour)
 
 type Claims struct {
 	Username string `json:"username"`
@@ -15,8 +16,6 @@ type Claims struct {
 }
 
 func GenerateToken(username, password string) (string, error) {
-	nowTime := time.Now()
-	expireTime := nowTime.Add(3 * time.Hour)
 
 	claims := Claims{
 		username,

@@ -2,8 +2,8 @@ package casbin
 
 import (
 	"backend/models"
-	err "backend/utils/common"
 	"backend/utils/logging"
+	"backend/utils/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -23,8 +23,8 @@ func Casbin() gin.HandlerFunc {
 		if !success {
 			logging.Info("e.Enforce err: %s", "很遗憾,权限验证没有通过")
 			c.JSON(http.StatusForbidden, gin.H{
-				"code": err.ERROR_PERMISSION,
-				"msg":  err.GetMsg(err.ERROR_PERMISSION),
+				"code": response.ErrorPermission,
+				"msg":  response.Msg[response.ErrorPermission],
 				"data": "鉴权失败",
 			})
 			c.Abort()

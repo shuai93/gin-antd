@@ -4,21 +4,21 @@ paths:
   /api/v1/tags:
     post:
       parameters:
-      - description: Name
-        in: query
-        name: name
-        required: true
-        type: string
-      - description: State
-        in: query
-        name: state
-        type: integer
-      - description: CreatedBy
-        in: query
-        name: created_by
-        type: integer
+        - description: Name
+          in: query
+          name: name
+          required: true
+          type: string
+        - description: State
+          in: query
+          name: state
+          type: integer
+        - description: CreatedBy
+          in: query
+          name: created_by
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: '{"code":200,"data":{},"msg":"ok"}'
@@ -28,27 +28,27 @@ paths:
   /api/v1/tags/{id}:
     put:
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: ID
-        in: query
-        name: name
-        required: true
-        type: string
-      - description: State
-        in: query
-        name: state
-        type: integer
-      - description: ModifiedBy
-        in: query
-        name: modified_by
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: integer
+        - description: ID
+          in: query
+          name: name
+          required: true
+          type: string
+        - description: State
+          in: query
+          name: state
+          type: integer
+        - description: ModifiedBy
+          in: query
+          name: modified_by
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: '{"code":200,"data":{},"msg":"ok"}'

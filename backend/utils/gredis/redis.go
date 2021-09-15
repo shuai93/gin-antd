@@ -75,6 +75,18 @@ func Get(key string) ([]byte, error) {
 	return reply, nil
 }
 
+func GetString(key string) (string, error) {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	reply, err := redis.String(conn.Do("GET", key))
+	if err != nil {
+		return "", err
+	}
+
+	return reply, nil
+}
+
 func Delete(key string) (bool, error) {
 	conn := RedisConn.Get()
 	defer conn.Close()

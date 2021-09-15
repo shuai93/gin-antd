@@ -1,15 +1,20 @@
 package models
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
-	Model
-	UserName       string
+	ID             int `gorm:"primary_key"`
+	Username       string
 	PasswordDigest string
 	Nickname       string
 	Status         string
+	Mobile         string
+	Role           string
 	Avatar         string `gorm:"size:1000"`
 	SuperUser      bool
+	Model
 }
 
 const (
@@ -23,6 +28,9 @@ const (
 	Suspend string = "suspend"
 )
 
+func (_ *User) TableName() string {
+	return "blog_user"
+}
 
 // GetUser 用ID获取用户
 func GetUser(ID interface{}) (User, error) {
@@ -31,6 +39,32 @@ func GetUser(ID interface{}) (User, error) {
 	return user, result.Error
 }
 
+func GetUserByUserName(username string) (User, error) {
+	var user User
+	result := db.Where("username = ?", username).First(&user)
+	return user, result.Error
+}
+
+// CheckPassword 校验密码
+func CheckPassword(username string, password string) (bool, User) {
+	info, _ := GetUserByUserName(username)
+	err := bcrypt.CompareHashAndPassword([]byte(info.PasswordDigest), []byte(password))
+	return err == nil, info
+}
+
+func GenerateUser(name string) bool {
+	var user = User{}
+	user.Username = name
+	_ = user.SetPassword(name)
+	user.Nickname = name
+	user.Status = "active"
+	user.Role = "admin"
+	user.Mobile = "13888888888"
+	user.SuperUser = true
+	user.Avatar = "https://pic4.zhimg.com/80/v2-867a95c44703177811f2590b09396113_1440w.jpg?source=1940ef5c"
+	db.Create(&user)
+	return true
+}
 
 // SetPassword 设置密码
 func (user *User) SetPassword(password string) error {
@@ -40,11 +74,4 @@ func (user *User) SetPassword(password string) error {
 	}
 	user.PasswordDigest = string(bytes)
 	return nil
-}
-
-
-// CheckPassword 校验密码
-func (user *User) CheckPassword(password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
-	return err == nil
 }

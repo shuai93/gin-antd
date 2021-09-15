@@ -7,8 +7,9 @@ import (
 )
 
 func Init() {
-	_ = godotenv.Load("dev.env")
+	_ = godotenv.Load("conf/dev.env")
 	fmt.Println("name: ", os.Getenv("name"))
 	fmt.Println("age: ", os.Getenv("age"))
+	fmt.Println("city: ", os.Getenv("city"))
 
 }

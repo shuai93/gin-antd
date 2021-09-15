@@ -1,9 +1,9 @@
 package main
 
 import (
+	"backend/base"
 	"backend/conf"
 	"backend/models"
-	"backend/routers"
 	"backend/utils/gredis"
 	"backend/utils/setting"
 	"fmt"
@@ -14,9 +14,9 @@ func main() {
 	conf.Init()
 	setting.Setup()
 	models.Setup()
-	gredis.Setup()
+	_ = gredis.Setup()
 
-	router := routers.InitRouter()
+	router := base.InitRouter()
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
 		Handler:        router,
@@ -25,5 +25,5 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	s.ListenAndServe()
+	_ = s.ListenAndServe()
 }

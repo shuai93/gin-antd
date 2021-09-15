@@ -1,10 +1,10 @@
-package v1
+package article
 
 import (
 	"backend/models"
 	"backend/utils/common"
+	"backend/utils/response"
 	"backend/utils/setting"
-	"backend/utils/util"
 	"github.com/astaxie/beego/adapter/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
@@ -18,14 +18,14 @@ func GetArticle(c *gin.Context) {
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := common.INVALID_PARAMS
+	code := response.ErrorExistTag
 	var data interface{}
 	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			data = models.GetArticle(id)
-			code = common.SUCCESS
+			code = response.SUCCESS
 		} else {
-			code = common.ERROR_NOT_EXIST_ARTICLE
+			code = response.ErrorExistTag
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -35,7 +35,7 @@ func GetArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": data,
 	})
 }
@@ -62,11 +62,11 @@ func GetArticles(c *gin.Context) {
 		valid.Min(tagId, 1, "tag_id").Message("标签ID必须大于0")
 	}
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
-		code = common.SUCCESS
+		code = response.SUCCESS
 
-		data["lists"] = models.GetArticles(util.GetPage(c), setting.AppSetting.PageSize, maps)
+		data["lists"] = models.GetArticles(common.GetPage(c), setting.AppSetting.PageSize, maps)
 		data["total"] = models.GetArticleTotal(maps)
 
 	} else {
@@ -77,7 +77,7 @@ func GetArticles(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": data,
 	})
 }
@@ -99,7 +99,7 @@ func AddArticle(c *gin.Context) {
 	valid.Required(createdBy, "created_by").Message("创建人不能为空")
 	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
 		if models.ExistTagByID(tagId) {
 			data := make(map[string]interface{})
@@ -111,9 +111,9 @@ func AddArticle(c *gin.Context) {
 			data["state"] = state
 
 			models.AddArticle(data)
-			code = common.SUCCESS
+			code = response.SUCCESS
 		} else {
-			code = common.ERROR_NOT_EXIST_TAG
+			code = response.ERROR
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -123,7 +123,7 @@ func AddArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]interface{}),
 	})
 }
@@ -152,7 +152,7 @@ func EditArticle(c *gin.Context) {
 	valid.Required(modifiedBy, "modified_by").Message("修改人不能为空")
 	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			if models.ExistTagByID(tagId) {
@@ -173,12 +173,12 @@ func EditArticle(c *gin.Context) {
 				data["modified_by"] = modifiedBy
 
 				models.EditArticle(id, data)
-				code = common.SUCCESS
+				code = response.SUCCESS
 			} else {
-				code = common.ERROR_NOT_EXIST_TAG
+				code = response.ERROR
 			}
 		} else {
-			code = common.ERROR_NOT_EXIST_ARTICLE
+			code = response.ERROR
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -188,7 +188,7 @@ func EditArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]string),
 	})
 }
@@ -200,13 +200,13 @@ func DeleteArticle(c *gin.Context) {
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := common.INVALID_PARAMS
+	code := response.ERROR
 	if !valid.HasErrors() {
 		if models.ExistArticleByID(id) {
 			models.DeleteArticle(id)
-			code = common.SUCCESS
+			code = response.SUCCESS
 		} else {
-			code = common.ERROR_NOT_EXIST_ARTICLE
+			code = response.ERROR
 		}
 	} else {
 		for _, err := range valid.Errors {
@@ -216,7 +216,7 @@ func DeleteArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg":  common.GetMsg(code),
+		"msg":  response.Msg[code],
 		"data": make(map[string]string),
 	})
 }
