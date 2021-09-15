@@ -1,13 +1,14 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
-import React, { useState, useRef } from 'react';
-import { useIntl, FormattedMessage } from 'umi';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import {PlusOutlined} from '@ant-design/icons';
+import {Button, Drawer, Input, message} from 'antd';
+import React, {useRef, useState} from 'react';
+import {useIntl} from 'umi';
+import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import {ModalForm, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import UpdateForm from './components/UpdateForm';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import {addRule, queryRule, removeRule, updateRule} from './service';
+
 /**
  * 添加节点
  *
@@ -18,7 +19,7 @@ const handleAdd = async (fields) => {
   const hide = message.loading('正在添加');
 
   try {
-    await addRule({ ...fields });
+    await addRule({...fields});
     hide();
     message.success('添加成功');
     return true;
@@ -151,7 +152,7 @@ const TableList = () => {
       sorter: true,
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
+      renderFormItem: (item, {defaultRender, ...rest}, form) => {
         const status = form.getFieldValue('status');
 
         if (`${status}` === '0') {
@@ -213,10 +214,10 @@ const TableList = () => {
               handleModalVisible(true);
             }}
           >
-            <PlusOutlined /> 新建
+            <PlusOutlined/> 新建
           </Button>,
         ]}
-        request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
+        request={(params, sorter, filter) => queryRule({...params, sorter, filter})}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -285,7 +286,7 @@ const TableList = () => {
           width="md"
           name="name"
         />
-        <ProFormTextArea width="md" name="desc" />
+        <ProFormTextArea width="md" name="desc"/>
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {

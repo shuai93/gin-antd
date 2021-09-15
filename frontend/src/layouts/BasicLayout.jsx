@@ -3,14 +3,14 @@
  *
  * @see You can view component api by: https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
-import React, { useEffect, useMemo, useRef } from 'react';
-import { Link, useIntl, connect, history } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import ProLayout, {DefaultFooter} from '@ant-design/pro-layout';
+import React, {useEffect, useMemo, useRef} from 'react';
+import {connect, history, Link} from 'umi';
+import {GithubOutlined} from '@ant-design/icons';
+import {Button, Result} from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { getMatchMenu } from '@umijs/route-utils';
+import {getMatchMenu} from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
 
 const noMatch = (
@@ -42,7 +42,7 @@ const defaultFooterDom = (
     links={[
       {
         key: 'github',
-        title: <GithubOutlined />,
+        title: <GithubOutlined/>,
         href: 'https://github.com/ant-design/ant-design-pro',
         blankTarget: true,
       },
@@ -91,7 +91,6 @@ const BasicLayout = (props) => {
       },
     [location.pathname],
   );
-  const {} = useIntl();
   return (
     <ProLayout
       logo={logo}
@@ -133,7 +132,7 @@ const BasicLayout = (props) => {
         return null;
       }}
       menuDataRender={menuDataRender}
-      rightContentRender={() => <RightContent />}
+      rightContentRender={() => <RightContent/>}
       postMenuData={(menuData) => {
         menuDataRef.current = menuData || [];
         return menuData || [];
@@ -150,7 +149,7 @@ const BasicLayout = (props) => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({global, settings}) => ({
   collapsed: global.collapsed,
   settings,
 }))(BasicLayout);

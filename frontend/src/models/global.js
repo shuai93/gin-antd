@@ -1,4 +1,5 @@
-import { queryNotices } from '@/services/user';
+import {queryNotices} from '@/services/user';
+
 const GlobalModel = {
   namespace: 'global',
   state: {
@@ -6,8 +7,9 @@ const GlobalModel = {
     notices: [],
   },
   effects: {
-    *fetchNotices(_, { call, put, select }) {
-      const data = yield call(queryNotices);
+    * fetchNotices(_, {call, put, select}) {
+      const result = yield call(queryNotices);
+      const {data} = result;
       yield put({
         type: 'saveNotices',
         payload: data,
@@ -24,7 +26,7 @@ const GlobalModel = {
       });
     },
 
-    *clearNotices({ payload }, { put, select }) {
+    * clearNotices({payload}, {put, select}) {
       yield put({
         type: 'saveClearedNotices',
         payload,
@@ -42,10 +44,11 @@ const GlobalModel = {
       });
     },
 
-    *changeNoticeReadState({ payload }, { put, select }) {
+    * changeNoticeReadState({payload}, {put, select}) {
+
       const notices = yield select((state) =>
         state.global.notices.map((item) => {
-          const notice = { ...item };
+          const notice = {...item};
 
           if (notice.id === payload) {
             notice.read = true;
@@ -73,12 +76,12 @@ const GlobalModel = {
         notices: [],
         collapsed: true,
       },
-      { payload },
+      {payload},
     ) {
-      return { ...state, collapsed: payload };
+      return {...state, collapsed: payload};
     },
 
-    saveNotices(state, { payload }) {
+    saveNotices(state, {payload}) {
       return {
         collapsed: false,
         ...state,
@@ -91,7 +94,7 @@ const GlobalModel = {
         notices: [],
         collapsed: true,
       },
-      { payload },
+      {payload},
     ) {
       return {
         ...state,

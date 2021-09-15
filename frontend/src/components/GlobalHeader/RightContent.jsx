@@ -1,11 +1,9 @@
-import { Tooltip, Tag } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-import { connect, SelectLang } from 'umi';
+import {connect} from 'umi';
 import Avatar from './AvatarDropdown';
-import  {GlobalNotice} from './NoticeIconView'
-import HeaderSearch from '../HeaderSearch';
+import {GlobalNotice} from './NoticeIconView'
 import styles from './index.less';
+
 const ENVTagColor = {
   dev: 'orange',
   test: 'green',
@@ -13,7 +11,7 @@ const ENVTagColor = {
 };
 
 const GlobalHeaderRight = (props) => {
-  const { theme, layout } = props;
+  const {theme, layout} = props;
   let className = styles.right;
 
   if (theme === 'dark' && layout === 'top') {
@@ -22,13 +20,13 @@ const GlobalHeaderRight = (props) => {
 
   return (
     <div className={className}>
-      <GlobalNotice />
-      <Avatar />
+      <GlobalNotice/>
+      <Avatar/>
     </div>
   );
 };
 
-export default connect(({ settings }) => ({
+export default connect(({settings}) => ({
   theme: settings.navTheme,
   layout: settings.layout,
 }))(GlobalHeaderRight);

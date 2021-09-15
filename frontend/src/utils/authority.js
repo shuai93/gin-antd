@@ -1,9 +1,7 @@
-import { reloadAuthorized } from './Authorized';
-import {w3cwebsocket as W3CWebSocket} from "websocket/lib/websocket"; // use localStorage to store the authority info, which might be sent from server in actual project.
+import {reloadAuthorized} from './Authorized';
 
 const authKey = "FullStack-authority"
 const userNameKey = "FullStack-username"
-const userIdKey = "FullStack-user"
 const tokenKey = "FullStack-token"
 
 
@@ -22,10 +20,9 @@ export function getAuthority(str) {
   }
   if (typeof authority === 'string') {
     return [authority];
-  } // preview.pro.ant.design only do not use in your production.
-  // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+  }
 
-  if (!authority && ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
+  if (!authority) {
     return ['admin'];
   }
 
@@ -40,13 +37,20 @@ export function setAuthority(authority, data) {
   reloadAuthorized();
 }
 
+export function delAuthority() {
+  localStorage.removeItem(authKey);
+  localStorage.removeItem(userNameKey);
+  localStorage.removeItem(tokenKey);
+
+  reloadAuthorized();
+}
+
 
 export function getLocalStorage(key) {
   const item = localStorage.getItem(key);
-
   return JSON.parse(item)
 }
 
-export function getToken () {
+export function getToken() {
   return getLocalStorage(tokenKey);
 };

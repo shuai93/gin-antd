@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { PageContainer } from '@ant-design/pro-layout';
-import { Card } from 'antd';
+import {PageContainer} from '@ant-design/pro-layout';
+import {Card} from 'antd';
 import ChatBox from 'react-chat-plugin';
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+import {w3cwebsocket as W3CWebSocket} from "websocket";
 
 const username = localStorage.getItem("FullStack-username");
 const user = localStorage.getItem("FullStack-user");
@@ -14,18 +14,17 @@ export default () => {
   const userName = JSON.parse(username);
 
 
-
   const message = [
-      {
-        text: userName + ' has joined the conversation',
-        timestamp: +new Date(),
-        type: 'notification',
-      },
+    {
+      text: userName + ' has joined the conversation',
+      timestamp: +new Date(),
+      type: 'notification',
+    },
   ];
 
   const [messages, concatMessage] = useState(message);
 
-  useEffect(()=> {
+  useEffect(() => {
 
     client.onopen = () => {
       console.log('WebSocket Client Connected');
@@ -61,7 +60,7 @@ export default () => {
   return (
     <PageContainer>
       <Card
-        title = "Full Stack Chat Room"
+        title="Full Stack Chat Room"
       >
 
 
@@ -73,7 +72,6 @@ export default () => {
           height={'500px'}
         />
       </Card>
-
 
 
     </PageContainer>

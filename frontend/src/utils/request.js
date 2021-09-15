@@ -1,7 +1,8 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
+import {extend} from 'umi-request';
+import {notification} from 'antd';
 import {getToken} from "@/utils/authority";
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -22,11 +23,18 @@ const codeMessage = {
 /** 异常处理程序 */
 
 const errorHandler = (error) => {
-  const { response } = error;
-
-  if (response && response.status) {
+  const {response} = error;
+  if (response && response.data) {
+    const errorText = response.data.message;
+    const {status, url} = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
+  }
+  else if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const {status, url} = response;
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
@@ -49,10 +57,9 @@ const request = extend({
 });
 
 
-
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
-  const newOptions = { ...options };
+  const newOptions = {...options};
 
   newOptions.headers = {
     'Authorization': getToken(),

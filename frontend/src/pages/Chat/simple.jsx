@@ -1,9 +1,8 @@
-import { PageContainer } from '@ant-design/pro-layout';
-import { Card } from 'antd';
+import {PageContainer} from '@ant-design/pro-layout';
+import {Card} from 'antd';
 import React, {useState} from "react";
-import ChatBox, { ChatFrame } from 'react-chat-plugin';
-import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-
+import ChatBox, {ChatFrame} from 'react-chat-plugin';
+import {SmileTwoTone} from '@ant-design/icons';
 
 
 export default () => {
@@ -28,7 +27,7 @@ export default () => {
         timestamp: 1578366393250,
       },
       {
-        author: { username: 'user2', id: 2, avatarUrl: null },
+        author: {username: 'user2', id: 2, avatarUrl: null},
         text: 'Show two buttons',
         type: 'text',
         timestamp: 1578366425250,
@@ -84,7 +83,7 @@ export default () => {
   return (
     <PageContainer>
       <Card
-        title = "Full Stack Chat Room"
+        title="Full Stack Chat Room"
       >
         <ChatFrame
           chatbox={
@@ -94,14 +93,14 @@ export default () => {
               messages={attr.messages}
               width={'300px'}
               showTypingIndicator={true}
-              activeAuthor={{ username: 'user2', id: 2, avatarUrl: null }}
+              activeAuthor={{username: 'user2', id: 2, avatarUrl: null}}
             />
           }
-          icon={<SmileTwoTone  />}
+          icon={<SmileTwoTone/>}
           clickIcon={handleClickIcon}
           showChatbox={attr.showChatbox}
           showIcon={attr.showIcon}
-          iconStyle={{ background: 'red', fill: 'white' }}
+          iconStyle={{background: 'red', fill: 'white'}}
         >
 
         </ChatFrame>

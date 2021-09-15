@@ -1,27 +1,28 @@
-import { stringify } from 'querystring';
-import { history } from 'umi';
-import { accountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
-import { message } from 'antd';
+import {stringify} from 'querystring';
+import {history} from 'umi';
+import {accountLogin} from '@/services/login';
+import {delAuthority, setAuthority} from '@/utils/authority';
+import {getPageQuery} from '@/utils/utils';
+import {message} from 'antd';
+
 const Model = {
   namespace: 'login',
   state: {
     status: undefined,
   },
   effects: {
-    *login({ payload }, { call, put }) {
+    * login({payload}, {call, put}) {
       const response = yield call(accountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
 
-      if (response.status === 'ok') {
+      if (response.code === 200) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         message.success('🎉 🎉 🎉  登录成功！');
-        let { redirect } = params;
+        let {redirect} = params;
 
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
@@ -47,8 +48,8 @@ const Model = {
     },
 
     logout() {
-      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
-
+      const {redirect} = getPageQuery(); // Note: There may be security issues, please note
+      delAuthority()
       if (window.location.pathname !== '/user/login' && !redirect) {
         history.replace({
           pathname: '/user/login',
@@ -60,9 +61,9 @@ const Model = {
     },
   },
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority, payload.data);
-      return { ...state, status: payload.status, type: payload.type };
+    changeLoginStatus(state, {payload}) {
+      setAuthority(payload.data.role, payload.data);
+      return {...state, status: payload.status, type: payload.type};
     },
   },
 };

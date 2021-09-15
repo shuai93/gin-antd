@@ -1,14 +1,14 @@
 import React from 'react';
-import { Modal } from 'antd';
+import {Modal} from 'antd';
 import {
+  ProFormDateTimePicker,
+  ProFormRadio,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
   StepsForm,
-  ProFormRadio,
-  ProFormDateTimePicker,
 } from '@ant-design/pro-form';
-import { useIntl, FormattedMessage } from 'umi';
+import {useIntl} from 'umi';
 
 const UpdateForm = (props) => {
   const intl = useIntl();

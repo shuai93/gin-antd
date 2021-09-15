@@ -1,8 +1,8 @@
-import { Button, message, notification } from 'antd';
-import { useIntl } from 'umi';
+import {Button, message, notification} from 'antd';
+import {useIntl} from 'umi';
 import defaultSettings from '../config/defaultSettings';
 
-const { pwa } = defaultSettings;
+const {pwa} = defaultSettings;
 const isHttps = document.location.protocol === 'https:'; // if pwa is true
 
 if (pwa) {
@@ -78,7 +78,7 @@ if (pwa) {
   });
 } else if ('serviceWorker' in navigator && isHttps) {
   // unregister service worker
-  const { serviceWorker } = navigator;
+  const {serviceWorker} = navigator;
 
   if (serviceWorker.getRegistrations) {
     serviceWorker.getRegistrations().then((sws) => {

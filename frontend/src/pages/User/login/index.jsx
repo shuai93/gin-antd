@@ -1,15 +1,11 @@
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import { Alert , Tabs } from 'antd';
-import React, { useState } from 'react';
-import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { connect } from 'umi';
+import {LockOutlined, UserOutlined,} from '@ant-design/icons';
+import {Alert, Tabs} from 'antd';
+import React, {useState} from 'react';
+import ProForm, {ProFormCheckbox, ProFormText} from '@ant-design/pro-form';
+import {connect} from 'umi';
 import styles from './index.less';
 
-const LoginMessage = ({ content }) => (
+const LoginMessage = ({content}) => (
   <Alert
     style={{
       marginBottom: 24,
@@ -21,15 +17,15 @@ const LoginMessage = ({ content }) => (
 );
 
 const Login = (props) => {
-  const { userLogin = {}, submitting } = props;
-  const { status, type: loginType } = userLogin;
+  const {userLogin = {}, submitting} = props;
+  const {status, type: loginType} = userLogin;
   const [type, setType] = useState('account');
 
   const handleSubmit = (values) => {
-    const { dispatch } = props;
+    const {dispatch} = props;
     dispatch({
       type: 'login/login',
-      payload: { ...values, type },
+      payload: {...values, type},
     });
   };
 
@@ -79,7 +75,7 @@ const Login = (props) => {
               name="userName"
               fieldProps={{
                 size: 'large',
-                prefix: <UserOutlined className={styles.prefixIcon} />,
+                prefix: <UserOutlined className={styles.prefixIcon}/>,
               }}
               placeholder='用户名'
               rules={[
@@ -93,7 +89,7 @@ const Login = (props) => {
               name="password"
               fieldProps={{
                 size: 'large',
-                prefix: <LockOutlined className={styles.prefixIcon} />,
+                prefix: <LockOutlined className={styles.prefixIcon}/>,
               }}
               placeholder='密码'
               rules={[
@@ -133,7 +129,7 @@ const Login = (props) => {
   );
 };
 
-export default connect(({ login, loading }) => ({
+export default connect(({login, loading}) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
 }))(Login);
