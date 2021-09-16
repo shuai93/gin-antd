@@ -5,7 +5,7 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  return request('/api/v1/currentUser');
+  return request('/api/v1/current-user');
 }
 
 export async function queryNotices() {

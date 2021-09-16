@@ -9,7 +9,7 @@ const GlobalModel = {
   effects: {
     * fetchNotices(_, {call, put, select}) {
       const result = yield call(queryNotices);
-      const {data} = result;
+      const {data : { results : data}} = result;
       yield put({
         type: 'saveNotices',
         payload: data,

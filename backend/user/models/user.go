@@ -1,6 +1,7 @@
-package models
+package user
 
 import (
+	"backend/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,7 +15,7 @@ type User struct {
 	Role           string
 	Avatar         string `gorm:"size:1000"`
 	SuperUser      bool
-	Model
+	models.Model
 }
 
 const (
@@ -35,13 +36,13 @@ func (_ *User) TableName() string {
 // GetUser 用ID获取用户
 func GetUser(ID interface{}) (User, error) {
 	var user User
-	result := db.First(&user, ID)
+	result := models.Db.First(&user, ID)
 	return user, result.Error
 }
 
 func GetUserByUserName(username string) (User, error) {
 	var user User
-	result := db.Where("username = ?", username).First(&user)
+	result := models.Db.Where("username = ?", username).First(&user)
 	return user, result.Error
 }
 
@@ -52,7 +53,7 @@ func CheckPassword(username string, password string) (bool, User) {
 	return err == nil, info
 }
 
-func GenerateUser(name string) bool {
+func InsertUser(name string) bool {
 	var user = User{}
 	user.Username = name
 	_ = user.SetPassword(name)
@@ -62,7 +63,7 @@ func GenerateUser(name string) bool {
 	user.Mobile = "13888888888"
 	user.SuperUser = true
 	user.Avatar = "https://pic4.zhimg.com/80/v2-867a95c44703177811f2590b09396113_1440w.jpg?source=1940ef5c"
-	db.Create(&user)
+	models.Db.Create(&user)
 	return true
 }
 

@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var Db *gorm.DB
 
 type Model struct {
 	CreateTime time.Time `gorm:"column:create_time;default:null" json:"create_time"`
@@ -40,22 +40,20 @@ func GetMysqlConnUrl() string {
 func Setup() {
 	var err error
 
-	db, err = gorm.Open(mysql.Open(GetMysqlConnUrl()), &gorm.Config{
+	Db, err = gorm.Open(mysql.Open(GetMysqlConnUrl()), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 
-	//db, err := gorm.Open(sqlite.Open("blog.db"), &gorm.Config{})
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	sqlDB, err := db.DB()
+	sqlDB, err := Db.DB()
 
 	if err != nil {
 		log.Println(err)
 	}
-	_ = db.AutoMigrate(&User{})
 
 	//  设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(10)
@@ -66,7 +64,7 @@ func Setup() {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	db.Callback().Create().Before("gorm:create").Register("update_created_at", updateTimeStampForCreateCallback)
+	Db.Callback().Create().Before("gorm:create").Register("update_created_at", updateTimeStampForCreateCallback)
 
 }
 
