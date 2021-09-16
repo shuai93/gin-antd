@@ -1,4 +1,4 @@
-package user
+package models
 
 import (
 	"backend/models"
@@ -30,7 +30,7 @@ const (
 )
 
 func (_ *User) TableName() string {
-	return "blog_user"
+	return "user_user"
 }
 
 // GetUser 用ID获取用户

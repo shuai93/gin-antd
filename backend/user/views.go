@@ -1,69 +1,49 @@
 package user
 
 import (
-	"backend/models"
+	"backend/user/models"
+	"backend/utils/common"
 	_ "backend/utils/common"
 	_ "backend/utils/logging"
 	"backend/utils/response"
+	"backend/utils/setting"
 	_ "github.com/astaxie/beego/core/validation"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
+var key = "username"
+
+
 func GetCurrentUser(c *gin.Context) {
-	result := DefaultUserResponse(UserDemo())
-	c.JSON(http.StatusOK, result)
+	username, _ := c.Get(key)
+	user, _ := models.GetUserByUserName(username.(string))
+	userResponse := DefaultUserResponse(user)
+	c.JSON(http.StatusOK, userResponse)
 }
 
 func GenerateUser(c *gin.Context) {
 	json := make(map[string]string) //注意该结构接受的内容
-	c.BindJSON(&json)
-	models.GenerateUser(json["name"])
+	_ = c.BindJSON(&json)
+	models.InsertUser(json["name"])
+	c.JSON(http.StatusOK, response.Response{}.SuccessResponse())
+}
+
+func GenerateNotice(c *gin.Context) {
+	models.InsertNotice()
 	c.JSON(http.StatusOK, response.Response{}.SuccessResponse())
 }
 
 func GetCurrentUserNotice(c *gin.Context) {
 	result := make(map[string]interface{})
-	notice1 := map[string]interface{}{
-		"id":       "000000001",
-		"avatar":   "你收到了 14 份新周报",
-		"title":    "你收到了 14 份新周报",
-		"datetime": "2017-08-09",
-		"type":     "notification",
-	}
+	data := make(map[string]interface{})
+	maps := make(map[string]interface{})
+	maps["user_id"], _ = c.Get("userId")
 
-	notice2 := map[string]interface{}{
-		"id":          "000000009",
-		"title":       "任务名称",
-		"description": "任务需要在 2017-01-12 20:00 前启动",
-		"extra":       "未开始",
-		"status":      "todo",
-
-		"type": "event",
-	}
-
-	notice3 := map[string]interface{}{
-		"id":          "000000007",
-		"avatar":      "https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg",
-		"title":       "朱偏右 回复了你",
-		"description": "这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像",
-		"datetime":    "2017-08-07",
-		"type":        "message",
-		"clickClose":  true,
-	}
-	notice4 := map[string]interface{}{
-		"id":       "000000002",
-		"avatar":   "你收到了 14 份新周报",
-		"title":    "你收到了 14 份新周报",
-		"datetime": "2017-08-09",
-		"type":     "notification",
-		"status":   "processing",
-		"read":     true,
-	}
-
-	data := [...]map[string]interface{}{notice1, notice2, notice3, notice4}
-
+	data["results"] = models.GetNoticeByUser(common.GetPage(c), setting.AppSetting.PageSize, maps)
+	data["count"] = models.GetNoticeTotal(maps)
 	result["data"] = data
 
 	c.JSON(http.StatusOK, result)
 }
+

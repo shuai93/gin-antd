@@ -2,7 +2,7 @@ package base
 
 import (
 	"backend/base/ws"
-	"backend/models"
+	"backend/user/models"
 	"backend/utils/common"
 	"backend/utils/gredis"
 	"backend/utils/logging"
@@ -40,7 +40,7 @@ func UserLogin(c *gin.Context) {
 	if ok {
 		success, user := models.CheckPassword(username, password)
 		if success {
-			token, err := common.GenerateToken(username, password)
+			token, err := common.GenerateToken(user.Username, user.PasswordDigest, user.ID)
 			if err != nil {
 				code = response.ErrorAuthToken
 			} else {

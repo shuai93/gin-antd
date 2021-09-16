@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backend/models"
+	"backend/article/models"
 	"github.com/robfig/cron"
 	"log"
 	"time"

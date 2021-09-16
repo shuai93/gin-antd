@@ -3,10 +3,10 @@ package base
 import (
 	"backend/article"
 	"backend/base/ws"
+	"backend/middlewares/casbin"
+	"backend/middlewares/jwt"
+	"backend/middlewares/recover"
 	"backend/user"
-	"backend/utils/middlewares/casbin"
-	"backend/utils/middlewares/jwt"
-	"backend/utils/middlewares/recover"
 	"backend/utils/setting"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"

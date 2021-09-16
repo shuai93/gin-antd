@@ -1,7 +1,7 @@
 package article
 
 import (
-	"backend/models"
+	"backend/article/models"
 	"backend/utils/common"
 	"backend/utils/response"
 	"backend/utils/setting"

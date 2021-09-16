@@ -34,6 +34,7 @@ func JWT() gin.HandlerFunc {
 			}
 			if claims != nil {
 				c.Set("username", claims.Username)
+				c.Set("userId", claims.UserId)
 			}
 		}
 

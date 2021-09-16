@@ -1,7 +1,7 @@
 package casbin
 
 import (
-	"backend/base"
+	"backend/models"
 	"backend/utils/logging"
 	"backend/utils/response"
 	"github.com/gin-gonic/gin"
@@ -17,7 +17,7 @@ func Casbin() gin.HandlerFunc {
 		// 获取用户的角色
 		username, _ := c.Get("username")
 		sub := username.(string)
-		e := base.Casbin()
+		e := models.Casbin()
 		logging.Info(obj, act, sub)
 		success := e.Enforce(sub, obj, act)
 		if !success {

@@ -6,9 +6,10 @@ import (
 
 func InitRouter(r *gin.RouterGroup) {
 	{
-		r.GET("/currentUser", GetCurrentUser)
-		r.POST("/generateUser", GenerateUser)
+		r.GET("/current-user", GetCurrentUser)
+		r.POST("/generate-user", GenerateUser)
 		r.GET("/notices", GetCurrentUserNotice)
+		r.POST("/generate-notice", GenerateNotice)
 	}
 	//api := r.Group("/user")
 
